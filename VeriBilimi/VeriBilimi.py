@@ -34,7 +34,7 @@ df['VisitorType'] = le.fit_transform(df['VisitorType']) # transform ise öğrend
 # Yukarıdaki month ve visitorType verileri string veri türünde oldukları için fit ve transorm yöntemleri uygulandı.
 
 
-#Aşağıdaki weekend ve revenue verileri ise boolean(t/f) veri türünde oldukları için direkt integer'a(0/1) dönüşümleri sağlandı
+#Aşağıdaki weekend ve revenue verileri ise boolean(t/f) veri türünde oldukları için direkt integer'a(1/0) dönüşümleri sağlandı
 df['Weekend'] = df['Weekend'].astype(int)
 df['Revenue'] = df['Revenue'].astype(int)
 # Month ve VisitorType gibi metin içeren sütunlar LabelEncoder ile sayılara çevrildi.

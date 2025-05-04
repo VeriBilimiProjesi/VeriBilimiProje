@@ -104,7 +104,6 @@ roc_data = {} # ROC eğrisi çizmek için gerekli olan FPR, TPR ve AUC değerler
 for name, model in models.items(): # Tüm modeller döngü yardımıyla teker teker eğitilip test ediliyor.
     model.fit(X_train, y_train)    # Modeli eğitmek amacıyla modeli inceliyor.
 
-    # Özel durum: LinearRegression çıktılarını sınıflandırmaya dönüştür
     y_pred = model.predict(X_test) # Eğitim tamamlandıktan sonra test verisiyle tahmin yapar.
 
 

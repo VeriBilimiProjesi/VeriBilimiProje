@@ -26,25 +26,24 @@ df = pd.read_csv("C:/Users/brkfa/OneDrive/Masaüstü/online_shoppers_intention.c
 # Makine öğrenmesi algoritmaları sadece sayısal verilerle çalışır. Bu yüzden:
 # Kategorik Veriler sayısal verilere dönüştürüldü ve
 # Makine öğrenmesi algoritmalarının kullanılabileceği forma getirilmiş oldu.
-le = LabelEncoder() # LabelEncoder sınıfından le adlı bir nesne yani dönüştürücü oluşturuldu.
+le = LabelEncoder() # LabelEncoder sınıfından "le" adlı bir nesne yani dönüştürücü oluşturuldu.
 
+# String -> Integer
 df['Month'] = le.fit_transform(df['Month']) # fit ifadesi veri üzerinde inceleme yapar(eşsiz değerleri bulur)
-
 df['VisitorType'] = le.fit_transform(df['VisitorType']) # transform ise öğrendiklerine göre veriyi dönüştürür.
 # Yukarıdaki month ve visitorType verileri string veri türünde oldukları için fit ve transorm yöntemleri uygulandı.
 
 
-#Aşağıdaki weekend ve revenue verileri ise boolean(t/f) veri türünde oldukları için direkt integer'a(1/0) dönüşümleri sağlandı
+# Boolean -> Integer(1/0)
+# Aşağıdaki weekend ve revenue verileri ise boolean(t/f) veri türünde oldukları için direkt integer'a(1/0) dönüşümleri sağlandı.
 df['Weekend'] = df['Weekend'].astype(int)
 df['Revenue'] = df['Revenue'].astype(int)
-# Month ve VisitorType gibi metin içeren sütunlar LabelEncoder ile sayılara çevrildi.
-# Weekend ve Revenue sütunları da True/False değil 0/1 olarak dönüştürüldü.
-
+# Weekend ve Revenue sütunları da True/False -> 0/1 olarak dönüştürüldü.
 
 
 # Özellikler ve Hedef
 X = df.drop('Revenue', axis=1) # drop komutu Revenue sütununu veriden çıkarır çünkü
-                               # Revenue bizim tahmin etmek istediğimiz şey yani hedef sütunu
+                                       # Revenue bizim tahmin etmek istediğimiz şey yani hedef sütunu.
 
 y = df['Revenue'] # Çıktı yani modelin tahmin etmeye çalıştığı şey.
 
@@ -58,8 +57,10 @@ X_scaled = scaler.fit_transform(X)
 # Test verisi ile modelin başarısı kontrol edilir.
 X_train, X_test, y_train, y_test = train_test_split(
     X_scaled, y, test_size=0.2, random_state=42, stratify=y # Verinin %20si test için ayrılacak.
-) # random_state ifadesi aynı sonuçları almak için sabit rastgelelik sağlar.
-  # stratify ifadesi ise eğitim ve test setindeki sınıf dağılımını korur.
+)
+  # random_state ifadesi aynı sonuçları almak için sabit rastgelelik sağlar.
+  # stratify ifadesi Eğitim ve test setlerinde, bağımlı değişkenin (y) sınıf dağılımının korunmasını sağlar.
+  # Özellikle sınıf dengesizliği varsa çok önemlidir.
 
 
 # 7 farklı makine öğrenmesi algoritmasını içeren dictionary tanımı.
@@ -80,6 +81,7 @@ models = {
 
     "Neural Network": MLPClassifier(hidden_layer_sizes=(100,), max_iter=1000, random_state=42)  # Yapay Sinir Ağı (MLP).
     # Girdi alır - Üzerinde matematiksel işlem yapar - Sonraki katmana iletir
+
     # hidden_layer_sizes=(100,) 100 nöronlu bir gizli katman kullanır.
     # max_iter=1000: ile de öğrenmesi için 1000 adım (iterasyon) tanınır.
 }
@@ -118,10 +120,10 @@ for name, model in models.items(): # Tüm modeller döngü yardımıyla teker te
     metrics["F1 Score"].append(f1_score(y_test, y_pred, average='macro'))
 
 
-    # Confusion Matrix
-    cm = confusion_matrix(y_test, y_pred) # Modelin tahminlerinin doğru ve yanlış olduğu durumları bir 2x2 tablo olarak verir.
+    # Confusion Matrix (Karmaşıklık Matrisi)
+    cm = confusion_matrix(y_test, y_pred) # Modelin tahminlerinin doğru ve yanlış olduğu durumları bir 2x2 tablo(matris) olarak verir.
 
-    disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=['No Purchase', 'Purchase'])  # Etiketleri özelleştir
+    disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=['No Purchase', 'Purchase'])  # Etiketleri özelleştirir.
     # Bu sınıf, confusion matrix'i görsel olarak çizmeye yarar.
     # 'No Purchase', 'Purchase' ifadeleri ile 0 ve 1 sınıfına anlamlı isimler veriliyor.
 
@@ -132,10 +134,9 @@ for name, model in models.items(): # Tüm modeller döngü yardımıyla teker te
 
 
     # ROC eğrisi, bir modelin sınıflandırmadaki başarısını olası tüm eşik (threshold) değerleri için gösteren bir grafik türüdür.
-    # ROC eğrisi verisi
-    if hasattr(model, "predict_proba"):
-        y_probs = model.predict_proba(X_test)[:, 1] # predict_proba Model tarafından sağlanan olasılık tahminine göre,
-                                                    # ilgili örneğin hedef değişkenin pozitif sınıfına (Revenue = 1) ait olma ihtimali %87’dir.
+
+    if hasattr(model, "predict_proba"): # Modelin predict_proba adında bir fonksiyonu var mı diye kontrol eder.
+        y_probs = model.predict_proba(X_test)[:, 1] # Modelin her test örneği için [negatif sınıf olasılığı, pozitif sınıf olasılığı] döndürmesini sağlar.
 
     elif hasattr(model, "decision_function"):   # decision_function() denen başka bir yöntemle, karar sınırına olan uzaklık bulunur.
         y_probs = model.decision_function(X_test) # y_probs, her test örneği için pozitif sınıfa (Revenue = 1) ait olma ihtimallerinin listesidir.

@@ -175,7 +175,7 @@ plt.figure(figsize=(10, 6))
 for name, (fpr, tpr, roc_auc) in roc_data.items():
     plt.plot(fpr, tpr, label=f'{name} (AUC = {roc_auc:.2f})')
 
-plt.plot([0, 1], [0, 1], 'k--', label='Şans (AUC = 0.5)') # Bu, rastgele tahmin yapan modelin ROC eğrisidir (köşegen çizgi)
+plt.plot([0, 1], [0, 1], 'k--', label='Şans (AUC = 0.5)') # Bu, rastgele tahmin yapan modelin ROC eğrisidir (köşegen çizgi).
 plt.xlabel('False Positive Rate')
 plt.ylabel('True Positive Rate')
 plt.title('ROC Eğrisi')

@@ -18,7 +18,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.neural_network import MLPClassifier  # Yapay Sinir Ağı (MLP) ekleniyor
 
 
-# Veri Yükleme işlemö
+# Veri Yükleme işlemi
 # Bu veri seti, çevrimiçi alışveriş yapan kişilerin davranışlarını ve alışveriş yapıp yapmadıklarını içeriyor.
 df = pd.read_csv("C:/Users/brkfa/OneDrive/Masaüstü/online_shoppers_intention.csv")
 
@@ -73,7 +73,7 @@ models = {
 
     "Random Forest": RandomForestClassifier(n_estimators=100, random_state=42), # n_estimators=100: 100 tane karar ağacı kurar. Her ağaç ayrı karar verir, çoğunluk ne diyorsa o olur
 
-    "Naive Bayes": GaussianNB(), #  Olasılık temelli çalışır. Özellikler birbirinden bağımsızmış gibi varsayar.
+    "Naive Bayes": GaussianNB(), # Olasılık temelli çalışır. Özellikler birbirinden bağımsızmış gibi varsayar.
 
     "Logistic Regression": LogisticRegression(max_iter=1000), # Veriyi sigmoid fonksiyonuyla 0-1 arası değerlere sıkıştırarak sınıflandırma yapar.
                                                               # max_iter=1000 ise zor problemler için daha fazla deneme hakkı verir

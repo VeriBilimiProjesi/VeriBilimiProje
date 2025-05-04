@@ -103,12 +103,14 @@ roc_data = {} # ROC eğrisi çizmek için gerekli olan FPR, TPR ve AUC değerler
 # Eğitim ve Değerlendirme
 for name, model in models.items(): # Tüm modeller döngü yardımıyla teker teker eğitilip test ediliyor.
     model.fit(X_train, y_train)    # Modeli eğitmek amacıyla modeli inceliyor.
+    # X_train : Modelin öğreneceği şeyin girdisidir.
+    # Y_train : Modelin tahmin etmeye çalıştığı şeydir.
 
     y_pred = model.predict(X_test) # Eğitim tamamlandıktan sonra test verisiyle tahmin yapar.
 
 
     # Bu satırlarda model isimleri metrics sözlüğünün "Model" listesine eklenr.
-    # average='macro' ifadesi ile her sınıfın skoru eşit ağırlıklı ortalama ile alır.
+    # average='macro' ifadesi her sınıfın skorunu ayrı ayrı hesaplar ve bu skorların aritmetik ortalamasını alır. Her sınıfa eşit önem verir.
     metrics["Model"].append(name)
     metrics["Accuracy"].append(accuracy_score(y_test, y_pred))
     metrics["Precision"].append(precision_score(y_test, y_pred, average='macro'))
@@ -175,6 +177,10 @@ for name, (fpr, tpr, roc_auc) in roc_data.items():
     plt.plot(fpr, tpr, label=f'{name} (AUC = {roc_auc:.2f})')
 
 plt.plot([0, 1], [0, 1], 'k--', label='Şans (AUC = 0.5)') # Bu, rastgele tahmin yapan modelin ROC eğrisidir (köşegen çizgi).
+# ROC eğrisi grafiğine "şans çizgisi" ekler. Bu çizgi, rastgele tahmin yapan bir modelin performansını temsil eder.
+# Bu çizgi, TPR = FPR olan tüm noktaları gösterir → yani model doğru tahmin yapamıyor, tamamen rastgele karar veriyor demektir.
+# Rastgele tahmin yapan bir modelin ROC AUC skoru her zaman 0.5 olur
+
 plt.xlabel('False Positive Rate')
 plt.ylabel('True Positive Rate')
 plt.title('ROC Eğrisi')

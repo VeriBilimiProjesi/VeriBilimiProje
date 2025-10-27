@@ -188,3 +188,4 @@ plt.title('ROC Eğrisi')
 plt.legend(loc='lower right') # Bu komut, grafikte kullanılan renklerin veya çizgilerin neyi temsil ettiğini gösteren küçük bir kutu ekler.
 plt.grid(True)
 plt.show()
+
